@@ -1,7 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from datetime import datetime as dt
+from decorators import writer
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_experimental_option("detach", True)
@@ -18,18 +18,10 @@ to display with the static data that beautiful soup scrapes.
 
 #TODO: store print values in variables to write to text file to plot data points later
 
-today = dt.today()
-
-def writer(function):
-    def file_app():
-        output = function()
-        with open("ppg_leader.text", 'a') as f:
-            f.write(f"{output}, {today}\n")
-    return file_app
 
 
 print("Scraping in Progress")
-@writer
+@writer("ppg_leader.text")
 def scoring_leader():
     highest_ppg_name = driver.find_element(By.CSS_SELECTOR, value="#leaders_pts_per_g .first_place .who").text
     highest_ppg_value = driver.find_element(By.CSS_SELECTOR, value="#leaders_pts_per_g .first_place .value").text
