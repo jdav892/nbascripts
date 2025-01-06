@@ -7,6 +7,6 @@ def writer(file_name):
         def file_entry():
             output = function()
             with open(file_name, 'a') as f:
-                f.write(f"{output}, {today}")
+                f.write(f"{output}, {today}\n")
         return file_entry
     return decorator

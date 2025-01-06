@@ -17,13 +17,11 @@ to display with the static data that beautiful soup scrapes.
 
 
 #TODO: store print values in variables to write to text file to plot data points later
-
 print("Scraping in Progress")
 def scoring_leader():
     highest_ppg_name = driver.find_element(By.CSS_SELECTOR, value="#leaders_pts_per_g .first_place .who").text
     highest_ppg_value = driver.find_element(By.CSS_SELECTOR, value="#leaders_pts_per_g .first_place .value").text
-    with open("ppg_leader.text", "w") as f:
-        f.write(f"{highest_ppg_name}, {highest_ppg_value}")
+    
     
 def rebounding_leader():
     highest_trbpg_name = driver.find_element(By.CSS_SELECTOR, value="#leaders_trb_per_g .first_place .who").text
@@ -46,10 +44,10 @@ def block_leader():
     print(highest_blk_name, highest_blk_value)
     
 scoring_leader()
-#rebounding_leader()
-#assist_leader()
-#steal_leader()
-#block_leader()
+rebounding_leader()
+assist_leader()
+steal_leader()
+block_leader()
 
 driver.quit()
 
