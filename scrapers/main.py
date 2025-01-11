@@ -17,7 +17,7 @@ def ppg_post():
 
 @app.route("/assists")
 def apg_post():
-    return 
+    return assist_leader
 
 @app.route("/steals")
 def spg_post():
