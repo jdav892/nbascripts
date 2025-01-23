@@ -8,7 +8,6 @@ chrome_options.add_experimental_option("detach", True)
 
 driver = webdriver.Chrome(options=chrome_options)
 driver.get("https://www.basketball-reference.com/leagues/NBA_2025_leaders.html")
-#TODO: store print values in variables to write to text file to plot data points later
 
 print("Scraping in Progress")
 @writer("spg_leader.csv")
