@@ -1,6 +1,6 @@
 # NBA Stat Scraping
 A set of web crawler scripts that scrape player information, and statistics. Can be used to fill CSV/Txt files or populate a database, depending on use cases or implementation.
-(This is repo is a template implementation that can be built upon)
+(This repo is a template implementation of the solution that can be built upon)
 
 ## How It's Made:
 
