@@ -1,10 +1,5 @@
-from apg import assist_leader
-from bpg import block_leader
-from ppg import scoring_leader
-from spg import steal_leader
-from rbpg import rebounding_leader
-
 from flask import Flask
+
 app = Flask(__name__)
 
 @app.route("/")
@@ -17,7 +12,7 @@ def ppg_post():
 
 @app.route("/assists")
 def apg_post():
-    return assist_leader
+    return 
 
 @app.route("/steals")
 def spg_post():

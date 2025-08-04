@@ -45,7 +45,7 @@ def steal_leader():
 
 
 
-def initializer():
+def main():
     print("Scraping In Progress")
     scoring_leader()
     assist_leader()
@@ -54,7 +54,5 @@ def initializer():
     steal_leader()
     print("Scraping Complete")
 
-
-initializer()
-
+main()
 driver.quit()
