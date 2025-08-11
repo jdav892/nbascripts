@@ -4,11 +4,10 @@ from ppg import scoring_leader
 from rbpg import rebound_leader
 from apg import assist_leader
 from analysis import run_all_analysis
-import time
 
 def collect_and_analyze():
     """Collect new data and run analysis"""
-    print("Collecting data...")
+    print("Scraping in progress")
     
     # Collect all stats
     steal_leader()
@@ -17,7 +16,7 @@ def collect_and_analyze():
     rebound_leader()
     assist_leader()
     
-    print("\nRunning analysis...")
+    print("\nScraping Complete")
     run_all_analysis()
 
 if __name__ == "__main__":

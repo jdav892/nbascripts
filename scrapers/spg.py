@@ -6,7 +6,6 @@ def scrape_steals():
     driver = create_driver()
     try:
         driver.get("https://www.basketball-reference.com/leagues/NBA_2025_leaders.html")
-        print("Scraping steals per game...")
         
         @db_writer("steals_per_game")
         def steal_leader():
