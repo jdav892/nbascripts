@@ -2,6 +2,11 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 from db.database import get_db_connection
 from datetime import datetime
+import os
+
+HOST = os.getenv('API_HOST', '0.0.0.0')
+PORT = int(os.getenv('API_PORT', '5000'))
+DEBUG = os.getenv('API_DEBUG', 'False').lower() == 'true'
 
 app = Flask(__name__)
 CORS(app)
@@ -87,4 +92,4 @@ def get_analysis():
     return jsonify(analysis_data)
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=DEBUG, host=HOST, port=PORT)

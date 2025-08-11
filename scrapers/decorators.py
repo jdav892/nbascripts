@@ -1,5 +1,5 @@
 from datetime import datetime as dt
-from db.database import save_stat, init_db
+from database import save_stat, init_db
 
 def db_writer(stat_type):
     def decorator(function):
@@ -25,7 +25,7 @@ def db_writer(stat_type):
 def db_reader(stat_type):
     def decorator(function):
         def wrapper(*args, **kwargs):
-            from db.database import get_db_connection
+            from database import get_db_connection
             import pandas as pd
             
             with get_db_connection() as conn:
