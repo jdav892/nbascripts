@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  nba-stats:
+    build: .
+    volumes:
+      # Mount the SQLite database file to persist data
+      - ./data:/app/data
+      # Mount logs
+      - ./logs:/var/log/nba_stats
+    environment:
+      - TZ=America/New_York  # Set timezone to EST
