@@ -56,3 +56,7 @@ logs/
 
 # Docker volumes
 data/
+
+# Sensitive configuration
+config/secrets.toml
+.env

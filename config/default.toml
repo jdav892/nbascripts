@@ -1,0 +1,52 @@
+# Default configuration values - DO NOT store sensitive data here
+[email]
+smtp_server = "smtp.gmail.com"
+smtp_port = 587
+
+[database]
+path = "data/nba_stats.db"
+backup_enabled = true
+backup_interval_days = 7
+
+[thresholds]
+# Statistical thresholds for notifications
+[thresholds.points_per_game]
+min = 20.0
+max = 35.0
+
+[thresholds.assists_per_game]
+min = 6.0
+max = 12.0
+
+[thresholds.rebounds_per_game]
+min = 8.0
+max = 15.0
+
+[thresholds.steals_per_game]
+min = 1.5
+max = 3.0
+
+[thresholds.blocks_per_game]
+min = 1.8
+max = 3.5
+
+[mvp_analysis]
+min_categories = 2
+include_historical = true
+historical_days = 30
+
+[scraping]
+schedule = "0 11 * * *"  # 11 AM EST daily
+retry_attempts = 3
+retry_delay_seconds = 300
+
+[selenium]
+headless = true
+timeout_seconds = 30
+user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+
+[logging]
+level = "INFO"
+file_path = "logs/nba_stats.log"
+max_size_mb = 100
+backup_count = 5

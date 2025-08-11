@@ -1,9 +1,51 @@
 import sys
 import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from scrapers.database import get_db_connection, send_email_notification
-from collections import defaultdict
+import os
+import sys
 import pandas as pd
+from datetime import datetime, timedelta
+from collections import defaultdict
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from db.database import get_db_connection, send_email_notification
+from utils.config import get_config
+import pandas as pd
+
+def get_historical_leaders(days=30):
+    """
+    Get leaders data for the specified number of historical days
+    
+    Args:
+        days (int): Number of days of historical data to retrieve
+        
+    Returns:
+        DataFrame with columns: stat_type, player_name, value, recorded_at
+    """
+    with get_db_connection() as conn:
+        query = """
+        WITH DailyLeaders AS (
+            SELECT 
+                stat_type,
+                player_name,
+                value,
+                recorded_at,
+                ROW_NUMBER() OVER (
+                    PARTITION BY stat_type, DATE(recorded_at) 
+                    ORDER BY recorded_at DESC
+                ) as daily_rank
+            FROM stat_records
+            WHERE recorded_at >= DATE('now', ?)
+        )
+        SELECT 
+            stat_type,
+            player_name,
+            value,
+            recorded_at
+        FROM DailyLeaders
+        WHERE daily_rank = 1
+        ORDER BY recorded_at DESC
+        """
+        return pd.read_sql_query(query, conn, params=(f'-{days} days',))
 
 def get_current_leaders():
     """Get the current leaders from all stat categories"""
@@ -32,23 +74,53 @@ def analyze_mvp_candidates():
     Analyze players leading in multiple statistical categories
     and send notifications for potential MVP candidates
     """
-    # Get current leaders
-    leaders_df = get_current_leaders()
+    config = get_config()
+    min_categories = config.get('mvp_analysis', 'min_categories', default=2)
+    include_historical = config.get('mvp_analysis', 'include_historical', default=True)
+    historical_days = config.get('mvp_analysis', 'historical_days', default=30)
+    
+    # Get leaders with historical context if enabled
+    if include_historical:
+        leaders_df = get_historical_leaders(days=historical_days)
+    else:
+        leaders_df = get_current_leaders()
     
     # Count categories led by each player
     player_categories = defaultdict(list)
+    consistency_scores = defaultdict(int)  # Track how consistently players lead categories
+    
     for _, row in leaders_df.iterrows():
-        player_categories[row['player_name']].append({
-            'stat_type': row['stat_type'],
-            'value': row['value']
-        })
+        player_name = row['player_name']
+        stat_type = row['stat_type']
+        value = row['value']
+        date = row['recorded_at']
+        
+        # Add to current categories if it's the most recent record
+        if not player_categories[player_name] or date == leaders_df['recorded_at'].max():
+            player_categories[player_name].append({
+                'stat_type': stat_type,
+                'value': value,
+                'consistency': 0  # Will be updated with historical analysis
+            })
+        
+        # Track consistency when player leads in a category
+        if include_historical:
+            consistency_scores[player_name] += 1
+    
+    # Update consistency scores
+    if include_historical:
+        for player in player_categories:
+            for stat in player_categories[player]:
+                stat['consistency'] = (consistency_scores[player] / historical_days) * 100
     
     # Check for players leading multiple categories
     mvp_candidates = {
         player: categories 
         for player, categories in player_categories.items() 
-        if len(categories) >= 2  # Player leads in 2 or more categories
+        if len(categories) >= min_categories  # Use configured threshold
     }
+    
+    return mvp_candidates
     
     # If we found any MVP candidates, send notifications
     if mvp_candidates:

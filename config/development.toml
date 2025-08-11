@@ -1,0 +1,10 @@
+# Development environment overrides
+[database]
+path = "data/nba_stats_dev.db"
+
+[logging]
+level = "DEBUG"
+file_path = "logs/nba_stats_dev.log"
+
+[selenium]
+headless = false  # Show browser window in development

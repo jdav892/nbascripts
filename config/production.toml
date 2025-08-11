@@ -1,0 +1,11 @@
+# Production environment overrides
+[database]
+path = "data/nba_stats_prod.db"
+backup_enabled = true
+
+[logging]
+level = "WARNING"
+file_path = "logs/nba_stats_prod.log"
+
+[selenium]
+headless = true  # Hide browser window in production
